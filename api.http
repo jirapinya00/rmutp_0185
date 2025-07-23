@@ -1,3 +1,5 @@
+@USERNAME={$env USERNAME}
+@PASSWORD={$env PASSWORD}
 GET http://localhost:8080/api/users
 
 
@@ -6,9 +8,9 @@ Content-Type: application/json
 
 {
  
-    "username": "jirapinya2",
+    "username": "{{USERNAME}}",
     "email": "jirapinya03srikaew@gmail.com",
-    "password": "Jirapinya@2546"
+    "password": "{{PASSWORD}}"
    
    
 
