@@ -26,5 +26,3 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_SSL: false
 
-    volumes:
-      - ./data/uploads:/srv/app/public

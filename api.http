@@ -1,0 +1,20 @@
+#GET http://localhost:8080/api/users
+
+
+POST http://localhost:8080/api/users
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+ 
+    "username": "jirapinya2",
+    "email": "jirapinya03srikaew@gmail.com",
+    "password": "Jirapinya@2546"
+   
+   
+
+}
+
+
+
+
