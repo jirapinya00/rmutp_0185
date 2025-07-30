@@ -1,41 +1,31 @@
 @BASE_URL=http://localhost:8080/api
 @USERNAME={{$env USERNAME}}
 @PASSWORD={{$env PASSWORD}}
-@JWT_TOKEN={{$env JWT_TOKEN}}
 
-### ✅ 1. ดึงรายชื่อผู้ใช้
-GET {{BASE_URL}}/users
-Authorization: Bearer {{JWT_TOKEN}}
+GET http://localhost:8080/api/users
 
-### ✅ 2. สมัครสมาชิกใหม่
+### 🔍 1. ทดสอบสมัครสมาชิก (ไม่ต้องใช้ token)
 POST {{BASE_URL}}/auth/local/register
 Content-Type: application/json
 
 {
     "username": "{{USERNAME}}",
-    "email": "jirapinya03srikaew@gmail.com",
+    "email": "test{{$timestamp}}@example.com",
     "password": "{{PASSWORD}}"
 }
 
-### ✅ 3. ล็อกอิน (เพื่อดึง JWT Token)
-POST {{BASE_URL}}/auth/local
+
+### 🔍 5. ทดสอบแก้ไขข้อมูลตัวเอง (PUT)
+PUT {{BASE_URL}}/users/me
 Content-Type: application/json
 
 {
-    "identifier": "jirapinya03srikaew@gmail.com",
+    "username": "update{{USERNAME}}",
+    "email": "update{{$timestamp}}@example.com",
     "password": "{{PASSWORD}}"
-}
+} 
 
-### ✅ 4. แก้ไขข้อมูลผู้ใช้ (ต้องมี token)
-PUT {{BASE_URL}}/users
-Authorization: Bearer {{JWT_TOKEN}}
-Content-Type: application/json
 
-{
-    "username": "jirapinya_updated",
-    "email": "jirapinya_updated@example.com"
-}
 
-### ✅ 5. ลบผู้ใช้ (ต้องมีสิทธิ์ admin)
-DELETE {{BASE_URL}}/users
-Authorization: Bearer {{JWT_TOKEN}}
+### 🔍 4. ทดสอบดูผู้ใช้ทั้งหมด (อาจต้องสิทธิ์ admin)
+GET {{BASE_URL}}/users/me
