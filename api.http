@@ -1,21 +1,162 @@
-@USERNAME={$env USERNAME}
-@PASSWORD={$env PASSWORD}
-GET http://localhost:8080/api/users
+@BASE_URL=http://localhost:8080/api
+@PASSWORD={{$env PASSWORD}}
+@JWT_TOKEN={$env JWT_TOKEN}
 
+### ===== USER CREATION WITH DIFFERENT PATTERNS =====
 
-POST http://localhost:8080/api/auth/local/register
+### 1. Create User with Current Timestamp
+POST {{BASE_URL}}/auth/local/register
 Content-Type: application/json
 
 {
- 
-    "username": "{{USERNAME}}",
-    "email": "jirapinya03srikaew@gmail.com",
+    "username": "user_{{$timestamp}}",
+    "email": "user{{$timestamp}}@example.com",
     "password": "{{PASSWORD}}"
-   
-   
-
 }
 
+### 2. Create User with Random Number
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
 
+{
+    "username": "random_{{$randomInt 100000 999999}}",
+    "email": "random{{$randomInt 100000 999999}}@example.com",
+    "password": "{{PASSWORD}}"
+}
 
+### 3. Create User with Date Pattern
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
 
+{
+    "username": "daily_{{$datetime 'YYYYMMDD_HHmmss'}}",
+    "email": "daily{{$datetime 'YYYYMMDD'}}@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### ===== LOGIN AND TOKEN MANAGEMENT =====
+
+### 4. Login (copy JWT from response)
+POST {{BASE_URL}}/auth/local
+Content-Type: application/json
+
+{
+    "identifier": "user{{$timestamp}}@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### 5. Get My Profile
+GET {{BASE_URL}}/users/me
+Authorization: Bearer {{JWT_TOKEN}}
+
+### ===== USER LISTING AND MANAGEMENT =====
+
+### 6. List All Users (requires admin token)
+GET {{BASE_URL}}/users
+Authorization: Bearer {{JWT_TOKEN}}
+
+### 7. Get User by ID
+GET {{BASE_URL}}/users/1
+Authorization: Bearer {{JWT_TOKEN}}
+
+### 8. Update User Profile
+PUT {{BASE_URL}}/users/me
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+    "firstName": "Jirapinya",
+    "lastName": "Srikaew",
+    "phone": "0901234567"
+}
+
+### ===== BATCH USER CREATION =====
+
+### 9. Quick User Creation Template (edit numbers as needed)
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "batch_user_001",
+    "email": "batch001@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### 10. Quick User Creation Template
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "batch_user_002",
+    "email": "batch002@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### ===== USER DELETION (Admin only) =====
+
+### 11. Delete User by ID (requires admin privileges)
+DELETE {{BASE_URL}}/users/2
+Authorization: Bearer {{JWT_TOKEN}}
+
+### ===== TESTING UTILITIES =====
+
+### 12. Test Registration with Validation Errors
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "",
+    "email": "invalid-email",
+    "password": "123"
+}
+
+### 13. Test Login with Wrong Credentials
+POST {{BASE_URL}}/auth/local
+Content-Type: application/json
+
+{
+    "identifier": "nonexistent@example.com",
+    "password": "wrongpassword"
+}
+
+### ===== BULK OPERATIONS =====
+
+### 14. Register User Set A
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "setA_user1",
+    "email": "seta1@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### 15. Register User Set A
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "setA_user2",
+    "email": "seta2@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### 16. Register User Set B
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "setB_user1",
+    "email": "setb1@example.com",
+    "password": "{{PASSWORD}}"
+}
+
+### 17. Register User Set B
+POST {{BASE_URL}}/auth/local/register
+Content-Type: application/json
+
+{
+    "username": "setB_user2",
+    "email": "setb2@example.com",
+    "password": "{{PASSWORD}}"
+}        
