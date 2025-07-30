@@ -1,31 +1,39 @@
 @BASE_URL=http://localhost:8080/api
-@USERNAME={{$env USERNAME}}
-@PASSWORD={{$env PASSWORD}}
+@PASSWORD={$env PASSWORD}
+@JWT_TOKEN={$env JWT_TOKEN}
 
-GET http://localhost:8080/api/users
-
-### 🔍 1. ทดสอบสมัครสมาชิก (ไม่ต้องใช้ token)
+GET {{BASE_URL}}/users/36
+### 1. Create User with Current Timestamp
 POST {{BASE_URL}}/auth/local/register
 Content-Type: application/json
 
 {
-    "username": "{{USERNAME}}",
-    "email": "test{{$timestamp}}@example.com",
+    "username": "user_{{$timestamp}}",
+    "email": "user{{$timestamp}}@example.com",
     "password": "{{PASSWORD}}"
 }
 
 
-### 🔍 5. ทดสอบแก้ไขข้อมูลตัวเอง (PUT)
-PUT {{BASE_URL}}/users/me
+
+### 4. Login (copy JWT from response)
+POST {{BASE_URL}}/auth/local
 Content-Type: application/json
 
 {
-    "username": "update{{USERNAME}}",
-    "email": "update{{$timestamp}}@example.com",
+    "identifier": "user{{$timestamp}}@example.com",
     "password": "{{PASSWORD}}"
-} 
+}
 
 
 
-### 🔍 4. ทดสอบดูผู้ใช้ทั้งหมด (อาจต้องสิทธิ์ admin)
-GET {{BASE_URL}}/users/me
+### 7. Get User by ID
+GET {{BASE_URL}}/users/36
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### ===== USER DELETION (Admin only) =====
+
+
+DELETE {{BASE_URL}}/users/36
+Authorization: Bearer {{JWT_TOKEN}}
+
